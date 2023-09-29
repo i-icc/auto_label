@@ -31,4 +31,6 @@ jobs:
         run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}"
 
       - name: add labels
-        run: echo "todo - add labels for PR"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr edit ${{ github.event.number }} --add-label "teamA,PRJ-A,bug" --repo ${{ github.repository }}
