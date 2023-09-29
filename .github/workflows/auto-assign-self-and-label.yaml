@@ -31,8 +31,8 @@ jobs:
         id: ticket_no
         run: |
           TITLE="${{ github.event.pull_request.title }}"
-          TEXT=$(echo "$TITLE" | grep -o '\[.*\]' | sed 's/\[\(.*\)\]/\1/')
-          echo "$TEXT" >> $GITHUB_OUTPUT
+          TICKET_NO=$(echo "$TITLE" | grep -o '\[.*\]' | sed 's/\[\(.*\)\]/\1/')
+          echo "ticket_no=$TICKET_NO" >> $GITHUB_OUTPUT
       
       - name: get ticket label
         run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}"
