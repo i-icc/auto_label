@@ -26,10 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Ticket Number
-        run: echo "todo - Get Ticket Number from title"
+        id: ticket_no
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          TEXT=$(echo "$TITLE" | grep -o '\[.*\]' | sed 's/\[\(.*\)\]/\1/')
+          echo "::set-output name=ticket_no::$TEXT"
       
       - name: get ticket label
-        run: echo "todo - get label from jira ticket"
+        run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}}"
 
       - name: add labels
         run: echo "todo - add labels for PR"
