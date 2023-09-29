@@ -10,26 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Assign self to the pull request
-      run: |
-        TOKEN=$GITHUB_TOKEN
-        PR_NO=${{ github.event.pull_request.number }}
-        USER=${{ github.actor }}
-        
-        curl --request POST \
-        --header "Authorization: token $TOKEN" \
-        --header "Accept: application/vnd.github.v3+json" \
-        --url "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NO/assignees" \
-        --data '{"assignees":["'$USER'"]}'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }} --repo ${{ github.repository }}
 
   add-labels:
     name: Label the PR based on the label of the jira ticket.
     runs-on: ubuntu-latest
+    outputs:
+      ticket_no: ${{ steps.ticket_no.outputs.ticket_no }}
     steps:
       - name: Get Ticket Number
-        run: echo "todo - Get Ticket Number from title"
+        id: ticket_no
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          TICKET_NO=$(echo "$TITLE" | grep -o '\[.*\]' | sed 's/\[\(.*\)\]/\1/')
+          echo "ticket_no=$TICKET_NO" >> $GITHUB_OUTPUT
       
       - name: get ticket label
-        run: echo "todo - get label from jira ticket"
+        run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}"
 
       - name: add labels
         run: echo "todo - add labels for PR"
