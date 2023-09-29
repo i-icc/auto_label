@@ -1,14 +1,13 @@
 name: auto-assign-self-and-label
 # action test
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+run-name: assign ${{ github.actor }} and add labels
+on:
+  pull_request:
+    types:
+      - opened
 jobs:
-  check-bats-version:
+  assign-self:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+    - name: show pull_request
+      run: echo "github.actor = ${{ github.actor}}, github.event.pull_request.user.login = ${{github.event.pull_request.user.login}}"
