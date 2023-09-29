@@ -31,15 +31,6 @@ jobs:
         run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}"
 
       - name: add labels
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const labelsToAdd = ["teamA"];
-            const payload = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: labelsToAdd
-            };
-            await github.issues.addLabels(payload);
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr edit ${{ github.event.number }} --add-label "teamA,PRJ-A,bug"
