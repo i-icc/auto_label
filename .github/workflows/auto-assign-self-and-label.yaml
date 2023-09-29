@@ -9,5 +9,14 @@ jobs:
   assign-self:
     runs-on: ubuntu-latest
     steps:
-    - name: show pull_request
-      run: echo "github.actor = ${{ github.actor}}, github.event.pull_request.user.login = ${{github.event.pull_request.user.login}}"
+    - name: Assign self to the pull request
+      run: |
+        TOKEN=$GITHUB_TOKEN
+        PR_NO=${{ github.event.pull_request.number }}
+        USER=${{ github.actor }}
+        
+        curl -X POST \
+        -H "Authorization: token $TOKEN" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/${{ github.repository }}/issues/$PR_NO/assignees \
+        -d '{"assignees":["'$USER'"]}'
