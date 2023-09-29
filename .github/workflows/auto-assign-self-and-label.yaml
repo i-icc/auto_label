@@ -24,6 +24,8 @@ jobs:
   add-labels:
     name: Label the PR based on the label of the jira ticket.
     runs-on: ubuntu-latest
+    outputs:
+      ticket_no: ${{ steps.ticket_no.outputs.ticket_no }}
     steps:
       - name: Get Ticket Number
         id: ticket_no
