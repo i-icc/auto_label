@@ -4,7 +4,7 @@ run-name: assign ${{ github.actor }} and add labels
 on:
   pull_request:
     types:
-      - opened
+      [opened, edited]
 jobs:
   assign-self:
     runs-on: ubuntu-latest
