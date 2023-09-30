@@ -37,7 +37,7 @@ jobs:
           echo "labels=$RES" >> $GITHUB_OUTPUT
 
       - name: show response
-        run: echo "${{ steps.jira_request.outputs.label }}"
+        run: echo "${{ steps.jira_request.outputs.labels }}"
 
       - name: add labels
         env:
