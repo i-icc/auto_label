@@ -34,7 +34,8 @@ jobs:
           RES=$(curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
-          echo "response=$RES" >> $GITHUB_OUTPUT
+          echo $RES
+          # echo "response=$RES" >> $GITHUB_OUTPUT
 
       - name: show response
         run: echo "${{ steps.jira_request.outputs.response }}"
@@ -42,7 +43,7 @@ jobs:
       - name: Jira Label to Github Label
         id: jl2gl
         run: |
-          LABELS=$(echo ?{{ steps.jira_request.outputs.response }} | jq '.fields.labels')
+          LABELS=$(echo ?{{ steps.jira_request.outputs.response }} | jq '.fields.labels'
           echo "$LABELS"
 
       - name: add labels
