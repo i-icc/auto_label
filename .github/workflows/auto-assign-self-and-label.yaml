@@ -1,17 +1,17 @@
 name: auto-assign-self-and-label
+# Assign self to the pull request and Label the PR based on the label of the jira ticket.
 run-name: assign ${{ github.actor }} and add labels
 on:
   pull_request:
-    types:
-      [opened, edited]
+    types: [opened, edited]
 jobs:
   assign-self:
     runs-on: ubuntu-latest
     steps:
-    - name: Assign self to the pull request
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }} --repo ${{ github.repository }}
+      - name: Assign self to the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }} --repo ${{ github.repository }}
 
   add-labels:
     name: Label the PR based on the label of the jira ticket.
@@ -25,19 +25,22 @@ jobs:
           TITLE="${{ github.event.pull_request.title }}"
           TICKET_NO=$(echo "$TITLE" | grep -o '\[.*\]' | sed 's/\[\(.*\)\]/\1/')
           echo "ticket_no=$TICKET_NO" >> $GITHUB_OUTPUT
-      
+
       - name: get ticket label
+        id: jira_request
         run: |
           BOARD="bo-neko"
 
           RES=$(curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
-          echo "${{ RES.fields }}"
-          echo "${{ RES.fields.labels }}"
-          echo "labels=$RES" >> $GITHUB_OUTPUT
+          LABELS=$(echo $RES | jq -r '.fields.labels|join(",")')
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
+
+      - name: show response
+        run: echo "${{ steps.jira_request.outputs.labels }}"
 
       - name: add labels
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh pr edit ${{ github.event.number }} --add-label "teamA,PRJ-A,bug" --repo ${{ github.repository }}
+        run: gh pr edit ${{ github.event.number }} --add-label ${{ steps.jira_request.outputs.labels }} --repo ${{ github.repository }}
