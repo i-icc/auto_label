@@ -34,10 +34,20 @@ jobs:
           RES=$(curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
-          echo "labels=${{RES.fields}}" >> $GITHUB_OUTPUT
+          echo "response=${{RES}}" >> $GITHUB_OUTPUT
 
       - name: show response
-        run: echo "${{ steps.jira_request.outputs.labels }}"
+        run: echo "${{ steps.jira_request.outputs.response }}"
+
+      - name: Jira Label to Github Label
+        id: jl2gl
+        run: |
+          # result=$(echo ?{{ steps.jira_request.outputs.response }} | jq '.fields.labels' | jq 'map(if . == "a" then "b" elif . == "c" then "d" else "" end)')
+          LABELS=$(echo ?{{ steps.jira_request.outputs.response }} | jq '.fields.labels')
+          # echo "::set-output name=processed_result::$result"
+          echo "$LABELS"
+          
+        shell: bash
 
       - name: add labels
         env:
