@@ -44,7 +44,6 @@ jobs:
         run: |
           LABELS="ugoke"
           echo "$LABELS"
-        shell: bash
 
       - name: add labels
         env:
