@@ -35,6 +35,7 @@ jobs:
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
           echo "${{ RES.fields }}"
           echo "${{ RES.fields.labels }}"
+          echo "${{ RES["fields"] }}"
           echo "labels=$RES" >> $GITHUB_OUTPUT
 
       - name: add labels
