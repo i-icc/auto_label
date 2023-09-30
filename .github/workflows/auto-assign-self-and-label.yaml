@@ -29,6 +29,8 @@ jobs:
       
       - name: get ticket label
         run: |
+          BOARD="bo-neko"
+
           curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}"
