@@ -1,4 +1,5 @@
 name: auto-assign-self-and-label
+# Assign self to the pull request and Label the PR based on the label of the jira ticket.
 run-name: assign ${{ github.actor }} and add labels
 on:
   pull_request:
