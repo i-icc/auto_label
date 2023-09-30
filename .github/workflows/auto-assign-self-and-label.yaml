@@ -34,7 +34,7 @@ jobs:
           RES=$(curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
-          echo "$RES"
+          echo "$ {{ RES.fields }}"
           echo "labels=$RES" >> $GITHUB_OUTPUT
 
       - name: add labels
