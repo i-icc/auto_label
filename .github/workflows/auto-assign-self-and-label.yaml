@@ -28,7 +28,13 @@ jobs:
           echo "ticket_no=$TICKET_NO" >> $GITHUB_OUTPUT
       
       - name: get ticket label
-        run: echo "todo - get label from jira ticket ${{ steps.ticket_no.outputs.ticket_no }}"
+        run: |
+          DOMAIN="bo-neko.atlassian.net"
+
+          curl -X GET \
+          -H "Authorization: Bearer YOUR_API_KEY_OR_OAUTH_TOKEN" \
+          -H "Content-Type: application/json" \
+          "https://$DOMAIN.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels"
 
       - name: add labels
         env:
