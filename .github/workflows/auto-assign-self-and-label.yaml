@@ -29,12 +29,9 @@ jobs:
       
       - name: get ticket label
         run: |
-          DOMAIN="bo-neko.atlassian.net"
-
           curl -X GET \
-          -H "Authorization: Bearer YOUR_API_KEY_OR_OAUTH_TOKEN" \
-          -H "Content-Type: application/json" \
-          "https://$DOMAIN.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels"
+          "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
+          --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}"
 
       - name: add labels
         env:
