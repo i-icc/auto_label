@@ -42,9 +42,8 @@ jobs:
       - name: Jira Label to Github Label
         id: jl2gl
         run: |
-          LABELS=$(echo ?{{ steps.jira_request.outputs.response }} | jq '.fields.labels')
+          LABELS="ugoke"
           echo "$LABELS"
-
         shell: bash
 
       - name: add labels
