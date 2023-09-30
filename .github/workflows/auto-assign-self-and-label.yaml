@@ -1,5 +1,4 @@
 name: auto-assign-self-and-label
-# action test
 run-name: assign ${{ github.actor }} and add labels
 on:
   pull_request:
@@ -34,7 +33,7 @@ jobs:
           RES=$(curl -X GET \
           "https://$BOARD.atlassian.net/rest/api/3/issue/${{ steps.ticket_no.outputs.ticket_no }}?fields=labels" \
           --user "${{ secrets.ATLASSIAN_USER_MAIL }}:${{ secrets.ATLASSIAN_TOKEN }}")
-          echo "$ {{ RES.fields }}"
+          echo "${{ RES.fields }}"
           echo "labels=$RES" >> $GITHUB_OUTPUT
 
       - name: add labels
