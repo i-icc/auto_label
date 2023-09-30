@@ -39,12 +39,6 @@ jobs:
       - name: show response
         run: echo "${{ steps.jira_request.outputs.response }}"
 
-      - name: Jira Label to Github Label
-        id: jl2gl
-        run: |
-          LABELS="ugoke"
-          echo "$LABELS"
-
       - name: add labels
         env:
           GH_TOKEN: ${{ github.token }}
